@@ -47,6 +47,6 @@ form input {
     background: url("images/ship.png") no-repeat center center;
 }
 
-.hit {
+.miss {
     background: url("images/miss.png") no-repeat center center;
 }
