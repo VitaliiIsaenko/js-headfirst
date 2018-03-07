@@ -1,3 +1,12 @@
+window.onload = init;
+
+function init() {
+    var fireButton = document.getElementById("fireButton");
+    fireButton.onclick = handleFireButton;
+    var guessInput = document.getElementById("guessInput");
+    guessInput.onkeypress = handleKeyPress;
+}
+
 var view = {
     displayMessage: function (msg) {
         var messageArea = document.getElementById("messageArea");
@@ -90,4 +99,20 @@ function parseGuess(guess) {
         }
     }
     return null;
+}
+
+function handleFireButton() {
+    var guessInput = document.getElementById("guessInput");
+    var guess = guessInput.value;
+
+    controller.processGuess(guess);
+    guessInput.value = "";
+}
+
+function handleKeyPress(e) {
+    var fireButton = document.getElementById("fireButton");
+    if (e.keyCode === 13){
+        fireButton.click();
+        return false;
+    }
 }
