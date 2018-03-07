@@ -28,9 +28,10 @@ var model = {
 
     fire: function (guess) {
         for (var i = 0; i < this.numShips; i++) {
-            var index = this.ships[i].locations.indexOf(guess);
+            var ship = this.ships[i];
+            var index = ship.locations.indexOf(guess);
             if (index >= 0) {
-                this.ships[i].hits[index] = "hit";
+                ship.hits[index] = "hit";
                 view.displayHit(guess);
                 view.displayMessage("Hit!");
                 if (this.isSunk(ship)) {
@@ -41,13 +42,13 @@ var model = {
             }
         }
         view.displayMiss(guess);
-        view.displayMessag e("You missed");
+        view.displayMessage("You missed");
         return false;
     },
 
     isSunk: function (ship) {
-        for (var i = 0; i < ship.locations; i++) {
-            if (ship.locations[i] !== "hit") {
+        for (var i = 0; i < ship.hits.length; i++) {
+            if (ship.hits[i] !== "hit") {
                 return false;
             }
         }
@@ -59,11 +60,16 @@ var controller = {
     guesses: 0,
 
     processGuess: function (guess) {
-
+        var location = parseGuess(guess);
+        if (location) {
+            this.guesses ++;
+            var hit = model.fire(location);
+            if (hit && model.shipsSunk == model.numShips) {
+                view.displayMessage("You sank all my battleships in " + this.guesses + " guesses");
+            }
+        }
 
     }
-
-
 }
 
 function parseGuess(guess) {
@@ -75,7 +81,7 @@ function parseGuess(guess) {
         var row = alphabet.indexOf(firstChar);
         var column = guess.charAt(1);
 
-        if (isNan(row) || isNan(column)) {
+        if (isNaN(row) || isNaN(column)) {
             alert("Oops, that isn't on the board");
         } else if (row < 0 || row >= model.boardSize || column < 0 || column >= model.boardSize) {
             alert("Ooops, that's off the board!");
